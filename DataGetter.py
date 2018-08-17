@@ -9,9 +9,11 @@ class DataGetter:
     def get_data(self, date_from, date_to):
         res_data = []
         for year in [2012, 2013, 2014, 2015]:
+            if year < date_from.year or year > date_to.year:
+                continue
             with open(self.filename_format % year, 'r') as csv_file:
                 reader = csv.reader(csv_file, delimiter='\t', quoting=csv.QUOTE_NONE)
-                next(reader, None)
+                next(reader, None) # skip header
                 for row in reader:
                     date_row = datetime.strptime(row[0], self.date_format)
                     if date_from.timestamp() < date_row.timestamp() < date_to.timestamp():
